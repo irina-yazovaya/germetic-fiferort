@@ -3,313 +3,431 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Конфигуратор огнестойкой пены — несколько полостей</title>
+    <title>Конфигуратор герметика FIREFORT</title>
     <style>
         * {
             box-sizing: border-box;
-            font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+            font-family: system-ui, 'Segoe UI', 'Roboto', sans-serif;
         }
         body {
-            background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+            background: #f0f4f8;
             margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             padding: 20px;
         }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #b22234;
+            margin-bottom: 10px;
+        }
+        .sub {
+            text-align: center;
+            color: #2c3e2f;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+        .tabs {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+        .tab-btn {
+            background: #e2e8f0;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #1e293b;
+        }
+        .tab-btn.active {
+            background: #b22234;
+            color: white;
+            box-shadow: 0 4px 10px rgba(178,34,52,0.3);
+        }
         .card {
-            max-width: 720px;
-            width: 100%;
             background: white;
             border-radius: 32px;
-            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2);
-            overflow: hidden;
-        }
-        .header {
-            background: #c62828;
-            color: white;
             padding: 24px 28px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
         }
-        .header h1 {
-            margin: 0 0 8px;
-            font-size: 1.8rem;
-        }
-        .badge {
-            background: #ffb74d;
-            color: #3e2723;
-            padding: 4px 12px;
-            border-radius: 40px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            display: inline-block;
-            margin-top: 12px;
-        }
-        .content {
-            padding: 24px 28px 32px;
+        .grid-2col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
         }
         .param-group {
             background: #f8fafc;
+            padding: 16px 20px;
             border-radius: 24px;
-            padding: 18px 20px;
-            margin-bottom: 24px;
-            border: 1px solid #e2e8f0;
         }
-        .input-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-        .input-field {
-            flex: 1;
-            min-width: 100px;
-        }
-        .input-field label {
-            font-size: 0.7rem;
+        .param-group label {
             font-weight: 600;
-            text-transform: uppercase;
-            color: #475569;
             display: block;
-            margin-bottom: 6px;
-        }
-        .input-field input {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 16px;
-            font-size: 1rem;
-        }
-        .input-field input:focus {
-            outline: none;
-            border-color: #c62828;
-            box-shadow: 0 0 0 3px rgba(198,40,40,0.2);
-        }
-        .unit {
-            font-size: 0.7rem;
-            color: #64748b;
-            margin-top: 4px;
-        }
-        .info-block {
-            background: white;
-            border-radius: 20px;
-            padding: 12px 16px;
-            margin: 16px 0;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .info-item {
-            flex: 1;
-        }
-        .info-label {
-            font-size: 0.7rem;
-            color: #334155;
-        }
-        .info-value {
-            font-weight: 700;
-            font-size: 1.2rem;
+            margin-bottom: 8px;
             color: #0f172a;
         }
-        .result {
-            background: #1e293b;
-            border-radius: 28px;
+        .param-group input {
+            width: 100%;
+            padding: 10px 14px;
+            font-size: 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 20px;
+            background: white;
+        }
+        .param-group .unit {
+            font-size: 0.8rem;
+            color: #475569;
+            margin-top: 5px;
+        }
+        .result-area {
+            background: #eef2ff;
             padding: 20px 24px;
-            margin: 24px 0 20px;
-            color: white;
+            border-radius: 28px;
+            margin-top: 20px;
         }
-        .result-number {
-            font-size: 3rem;
-            font-weight: 800;
-            line-height: 1;
-            margin: 8px 0;
-        }
-        .detail {
+        .result-line {
             display: flex;
             justify-content: space-between;
-            border-top: 1px solid #334155;
-            margin-top: 12px;
-            padding-top: 10px;
-            font-size: 0.85rem;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #cbd5e1;
+            padding: 12px 0;
+            font-size: 1.05rem;
         }
-        button {
-            background: #c62828;
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 40px;
-            font-weight: bold;
-            font-size: 1rem;
-            color: white;
-            cursor: pointer;
-            transition: 0.2s;
+        .result-line:last-child {
+            border-bottom: none;
         }
-        button:hover {
-            background: #b71c1c;
-            transform: scale(0.98);
+        .result-label {
+            font-weight: 600;
+            color: #1e293b;
         }
-        .warning {
-            background: #fff7e5;
-            border-left: 4px solid #f59e0b;
-            padding: 12px 16px;
-            border-radius: 16px;
-            font-size: 0.75rem;
+        .result-value {
+            font-weight: 700;
+            color: #b22234;
+            font-size: 1.2rem;
+        }
+        .note {
+            font-size: 0.8rem;
+            color: #475569;
             margin-top: 20px;
-            color: #92400e;
+            font-style: italic;
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 15px;
         }
-        hr {
-            margin: 16px 0;
-            border: none;
-            border-top: 1px solid #e2e8f0;
+        .badge {
+            background: #d9f99d;
+            color: #3f6212;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
         }
-        .highlight {
-            background: #e6f0ff;
-            border-radius: 16px;
-            padding: 4px 10px;
-            font-weight: bold;
+        @media (max-width: 700px) {
+            .card { padding: 18px; }
+            .tab-btn { padding: 8px 18px; }
+        }
+        footer {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #475569;
+            margin-top: 30px;
         }
     </style>
 </head>
 <body>
-<div class="card">
-    <div class="header">
-        <h1>🔥 Огнестойкая пена</h1>
-        <p>Расчёт баллонов (750 мл) — выход <strong>45 литров</strong> готовой пены</p>
-        <div class="badge">⚙️ Техпотери 5% | 🛡️ Запас 15%</div>
+<div class="container">
+    <h1>🔥 FIREFORT</h1>
+    <div class="sub">Огнестойкий герметик — калькулятор расхода</div>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="joints">📏 Швы (прямоугольные)</button>
+        <button class="tab-btn" data-tab="pipes">🔄 Трубные проходки (круглые)</button>
+        <button class="tab-btn" data-tab="universal">🏭 Универсальная проходка (кабели)</button>
     </div>
-    <div class="content">
+
+    <!-- 1. ГЕРМЕТИК ДЛЯ ШВОВ (акриловый / огнестойкий) -->
+    <div id="tab-joints" class="card tab-content" style="display: block;">
+        <h3>📐 Прямоугольные швы и стыки</h3>
+        <div class="grid-2col">
+            <div class="param-group">
+                <label>Ширина шва (мм)</label>
+                <input type="number" id="joint-width" value="100" step="1">
+                <div class="unit">мм — зазор между поверхностями</div>
+            </div>
+            <div class="param-group">
+                <label>Глубина шва (мм)</label>
+                <input type="number" id="joint-depth" value="10" step="1">
+                <div class="unit">мм (обычно 10–20 мм)</div>
+            </div>
+            <div class="param-group">
+                <label>Длина шва (мм)</label>
+                <input type="number" id="joint-length" value="500" step="50">
+                <div class="unit">мм</div>
+            </div>
+            <div class="param-group">
+                <label>Количество швов</label>
+                <input type="number" id="joint-count" value="2" step="1">
+                <div class="unit">шт.</div>
+            </div>
+        </div>
         <div class="param-group">
-            <div style="font-weight: 600; margin-bottom: 16px;">📐 Размеры ОДНОЙ полости / трещины</div>
-            <div class="input-row">
-                <div class="input-field">
-                    <label>Длина (L)</label>
-                    <input type="number" id="length" value="0.5" step="0.01">
-                    <div class="unit">метры</div>
-                </div>
-                <div class="input-field">
-                    <label>Ширина (W)</label>
-                    <input type="number" id="width" value="0.02" step="0.001">
-                    <div class="unit">метры</div>
-                </div>
-                <div class="input-field">
-                    <label>Глубина (H)</label>
-                    <input type="number" id="height" value="0.03" step="0.001">
-                    <div class="unit">метры</div>
-                </div>
-            </div>
-            <div class="input-row">
-                <div class="input-field">
-                    <label>📌 Количество таких же полостей</label>
-                    <input type="number" id="cavityCount" value="1" step="1" min="1">
-                    <div class="unit">штук (одинаковых)</div>
-                </div>
-            </div>
-            <div style="font-size: 0.7rem; margin-top: 10px; color: #555;">📌 1 см = 0.01 м · 10 см = 0.1 м</div>
+            <label>➕ Дополнительный запас (%)</label>
+            <input type="number" id="joint-waste" value="10" step="1">
+            <div class="unit">обычно 10–15% на неровности</div>
         </div>
-
-        <div class="info-block">
-            <div class="info-item">
-                <div class="info-label">📦 Баллон</div>
-                <div class="info-value">750 мл</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">💨 Выход пены</div>
-                <div class="info-value">45 литров</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">⚙️ Техпотери</div>
-                <div class="info-value">5%</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">🛡️ Запас</div>
-                <div class="info-value">15%</div>
-            </div>
+        <div class="result-area" id="joint-results">
+            <!-- динамические результаты -->
         </div>
-
-        <div class="result">
-            <div style="opacity:0.8; font-size:0.8rem;">🧨 ТРЕБУЕТСЯ БАЛЛОНОВ (ВСЕГО)</div>
-            <div class="result-number" id="balloonCount">—</div>
-            <div class="detail">
-                <span>📐 Объём 1 полости:</span>
-                <span id="singleVol">—</span>
-            </div>
-            <div class="detail">
-                <span>🔢 Суммарный объём (всех <span id="countDisplay">—</span> полостей):</span>
-                <span id="totalVolGeom">—</span>
-            </div>
-            <div class="detail">
-                <span>➕ Требуется пены (с запасом 15%):</span>
-                <span id="requiredVol">—</span>
-            </div>
-            <div class="detail">
-                <span>🧴 Полезный выход с 1 баллона (с учётом 5% потерь):</span>
-                <span>42,75 л</span>
-            </div>
-        </div>
-
-        <button id="calcBtn">⟳ Пересчитать</button>
-        <div class="warning">
-            ⚠️ Выход 45 литров — это объём уже расширенной пены из одного баллона. <br>
-            Вычитаем 5% техпотерь → 42,75 л полезного объёма с баллона. Затем добавляем 15% запаса к суммарному объёму полостей.
-        </div>
-        <hr>
-        <div style="font-size:0.7rem; text-align:center;">Формула: N = ceil( (V<sub>одной полости</sub> × кол-во) × 1,15 / 42,75 )</div>
+        <div class="note">* Расход рассчитан по формуле: (ширина × глубина × длина × кол-во швов) + запас. Объём картриджа 310 мл (0.31 л).</div>
     </div>
+
+    <!-- 2. ТРУБНЫЕ ПРОХОДКИ (круглые отверстия) -->
+    <div id="tab-pipes" class="card tab-content" style="display: none;">
+        <h3>🕳️ Проходки труб в круглых отверстиях</h3>
+        <div class="grid-2col">
+            <div class="param-group">
+                <label>Диаметр отверстия (мм)</label>
+                <input type="number" id="pipe-hole-dia" value="200" step="10">
+                <div class="unit">мм</div>
+            </div>
+            <div class="param-group">
+                <label>Диаметр трубы (мм)</label>
+                <input type="number" id="pipe-tube-dia" value="100" step="10">
+                <div class="unit">мм</div>
+            </div>
+            <div class="param-group">
+                <label>Глубина шва / зазора (мм)</label>
+                <input type="number" id="pipe-depth" value="15" step="1">
+                <div class="unit">мм (толщина герметика по глубине)</div>
+            </div>
+            <div class="param-group">
+                <label>Количество отверстий</label>
+                <input type="number" id="pipe-count" value="3" step="1">
+                <div class="unit">шт.</div>
+            </div>
+        </div>
+        <div class="param-group">
+            <label>Запас на монтаж (+%)</label>
+            <input type="number" id="pipe-waste" value="10" step="1">
+            <div class="unit">% к объёму</div>
+        </div>
+        <div class="result-area" id="pipe-results"></div>
+        <div class="note">* Для круглой проходки длина шва = π × (D_отв + D_трубы)/2 (средняя окружность). Объём = длина шва × ширина кольца × глубина × кол-во.</div>
+    </div>
+
+    <!-- 3. УНИВЕРСАЛЬНАЯ ПРОХОДКА (прямоугольная с кабелями) -->
+    <div id="tab-universal" class="card tab-content" style="display: none;">
+        <h3>🏢 Прямоугольная проходка (кабели, пучки)</h3>
+        <div class="grid-2col">
+            <div class="param-group">
+                <label>Ширина проходки (мм)</label>
+                <input type="number" id="uni-width" value="1000" step="50">
+                <div class="unit">мм</div>
+            </div>
+            <div class="param-group">
+                <label>Высота проходки (мм)</label>
+                <input type="number" id="uni-height" value="1000" step="50">
+                <div class="unit">мм</div>
+            </div>
+            <div class="param-group">
+                <label>Заполнение кабелями (%)</label>
+                <input type="number" id="uni-fill" value="20" step="5">
+                <div class="unit">% площади занят кабелями</div>
+            </div>
+            <div class="param-group">
+                <label>Количество проходок</label>
+                <input type="number" id="uni-count" value="4" step="1">
+                <div class="unit">шт.</div>
+            </div>
+        </div>
+        <div class="grid-2col">
+            <div class="param-group">
+                <label>Запас на покрытие кабелей (вылет, см)</label>
+                <input type="number" id="uni-cable-overhang" value="20" step="5">
+                <div class="unit">см покрытие кабелей от проходки</div>
+            </div>
+            <div class="param-group">
+                <label>Общий запас + технологический (%)</label>
+                <input type="number" id="uni-waste" value="10" step="1">
+                <div class="unit">% к итоговому объёму</div>
+            </div>
+        </div>
+        <div class="result-area" id="uni-results"></div>
+        <div class="note">** Расчёт: Объём герметика = (площадь проходки * (1 - заполнение/100) * толщина слоя 1мм) + объём на покрытие кабелей (вылет × периметр кабельной зоны). Картридж 310 мл, ведро 3 л — показываем оба варианта.</div>
+    </div>
+    <footer>Расход приблизительный. Для точного подбора учитывайте рекомендации технолога. FIREFORT® — огнезащита.</footer>
 </div>
 
 <script>
-    const OUTPUT_LITERS_PER_CAN = 45;        // литров готовой пены с баллона
-    const TECH_LOSS_PERCENT = 0.05;           // 5% техпотерь
-    const EXTRA_RESERVE = 0.15;               // 15% запас
-    
-    const USABLE_LITERS_PER_CAN = OUTPUT_LITERS_PER_CAN * (1 - TECH_LOSS_PERCENT); // 42.75 л
-    
-    function calculate() {
-        let L = parseFloat(document.getElementById('length').value) || 0;
-        let W = parseFloat(document.getElementById('width').value) || 0;
-        let H = parseFloat(document.getElementById('height').value) || 0;
-        let count = parseInt(document.getElementById('cavityCount').value) || 1;
-        
-        if (count < 1) count = 1;
-        
-        L = Math.max(0, L);
-        W = Math.max(0, W);
-        H = Math.max(0, H);
-        
-        const volumeSingleM3 = L * W * H;
-        const volumeSingleLiters = volumeSingleM3 * 1000;
-        
-        const totalVolumeLiters = volumeSingleLiters * count;
-        
-        const requiredWithReserve = totalVolumeLiters * (1 + EXTRA_RESERVE);
-        
-        let balloons = 0;
-        if (requiredWithReserve > 0 && USABLE_LITERS_PER_CAN > 0) {
-            balloons = Math.ceil(requiredWithReserve / USABLE_LITERS_PER_CAN);
+    // Утилиты объёма картриджа 310 мл = 310000 мм³
+    const CARTRIDGE_VOLUME_ML = 310;   // мл
+    const BUCKET_VOLUME_ML = 3000;     // 3 литра
+
+    // Переключение табов
+    const tabs = document.querySelectorAll('.tab-btn');
+    const contents = {
+        joints: document.getElementById('tab-joints'),
+        pipes: document.getElementById('tab-pipes'),
+        universal: document.getElementById('tab-universal')
+    };
+
+    tabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.getAttribute('data-tab');
+            tabs.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            Object.keys(contents).forEach(key => {
+                contents[key].style.display = 'none';
+            });
+            if (tabId === 'joints') contents.joints.style.display = 'block';
+            if (tabId === 'pipes') contents.pipes.style.display = 'block';
+            if (tabId === 'universal') contents.universal.style.display = 'block';
+            // обновить активный расчёт при переключении (пересчёт)
+            if (tabId === 'joints') updateJointCalc();
+            if (tabId === 'pipes') updatePipeCalc();
+            if (tabId === 'universal') updateUniCalc();
+        });
+    });
+
+    // ---------- 1. Швы ----------
+    function updateJointCalc() {
+        let width = parseFloat(document.getElementById('joint-width').value) || 0;
+        let depth = parseFloat(document.getElementById('joint-depth').value) || 0;
+        let length = parseFloat(document.getElementById('joint-length').value) || 0;
+        let count = parseFloat(document.getElementById('joint-count').value) || 0;
+        let wastePercent = parseFloat(document.getElementById('joint-waste').value) || 0;
+
+        if (width <= 0 || depth <= 0 || length <= 0 || count <= 0) {
+            document.getElementById('joint-results').innerHTML = '<div class="result-line">⚠️ Введите положительные размеры</div>';
+            return;
         }
+
+        // объём в мм³: ширина * глубина * длина * количество
+        let volumeMM3 = width * depth * length * count;
+        let volumeML = volumeMM3 / 1000;   // переводим мм³ в мл
+        let volumeWithWaste = volumeML * (1 + wastePercent / 100);
         
-        // отображение
-        document.getElementById('singleVol').innerHTML = volumeSingleLiters.toFixed(4) + ' л (' + volumeSingleM3.toFixed(6) + ' м³)';
-        document.getElementById('totalVolGeom').innerHTML = totalVolumeLiters.toFixed(2) + ' л (' + (totalVolumeLiters / 1000).toFixed(6) + ' м³)';
-        document.getElementById('requiredVol').innerHTML = requiredWithReserve.toFixed(2) + ' л';
-        document.getElementById('countDisplay').innerHTML = count;
+        let cartridgesNeeded = Math.ceil(volumeWithWaste / CARTRIDGE_VOLUME_ML);
         
-        if (totalVolumeLiters === 0) {
-            document.getElementById('balloonCount').innerHTML = '0 <span style="font-size:1rem;">(нет пустот)</span>';
-        } else {
-            document.getElementById('balloonCount').innerHTML = balloons + ' <span style="font-size:1rem;">шт.</span>';
+        document.getElementById('joint-results').innerHTML = `
+            <div class="result-line"><span class="result-label">📦 Объём швов (без запаса):</span><span class="result-value">${volumeML.toFixed(1)} мл</span></div>
+            <div class="result-line"><span class="result-label">➕ С запасом ${wastePercent}%:</span><span class="result-value">${volumeWithWaste.toFixed(1)} мл</span></div>
+            <div class="result-line"><span class="result-label">🧪 Картриджей (310 мл):</span><span class="result-value">${cartridgesNeeded} шт.</span></div>
+            <div class="result-line"><span class="result-label">💧 Общий вес ~ (≈1.3 г/мл):</span><span class="result-value">${(volumeWithWaste * 1.3 / 1000).toFixed(1)} кг</span></div>
+        `;
+    }
+
+    // ---------- 2. Трубные проходки (кольцевой зазор) ----------
+    function updatePipeCalc() {
+        let holeDia = parseFloat(document.getElementById('pipe-hole-dia').value) || 0;
+        let tubeDia = parseFloat(document.getElementById('pipe-tube-dia').value) || 0;
+        let depth = parseFloat(document.getElementById('pipe-depth').value) || 0;
+        let count = parseFloat(document.getElementById('pipe-count').value) || 0;
+        let waste = parseFloat(document.getElementById('pipe-waste').value) || 0;
+
+        if (holeDia <= 0 || tubeDia <= 0 || depth <= 0 || count <= 0 || holeDia <= tubeDia) {
+            document.getElementById('pipe-results').innerHTML = '<div class="result-line">⚠️ Проверьте: диаметр отверстия > диаметра трубы, все значения >0</div>';
+            return;
         }
+        // средняя окружность зазора: π * ( (D_hole + D_tube)/2 )
+        let avgDiameter = (holeDia + tubeDia) / 2;
+        let seamLengthMM = Math.PI * avgDiameter;   // длина кольцевого шва (мм)
+        let gapWidth = (holeDia - tubeDia) / 2;      // ширина кольца (мм)
+        // объём одного шва мм³ = длина * ширина_кольца * глубина
+        let oneSealVolumeMM3 = seamLengthMM * gapWidth * depth;
+        let totalVolumeMM3 = oneSealVolumeMM3 * count;
+        let volumeML = totalVolumeMM3 / 1000;
+        let volumeWithWaste = volumeML * (1 + waste / 100);
+        let cartridges = Math.ceil(volumeWithWaste / CARTRIDGE_VOLUME_ML);
+        
+        document.getElementById('pipe-results').innerHTML = `
+            <div class="result-line"><span class="result-label">🔄 Ширина кольцевого зазора:</span><span class="result-value">${gapWidth.toFixed(1)} мм</span></div>
+            <div class="result-line"><span class="result-label">📏 Длина шва (средняя окружность):</span><span class="result-value">${seamLengthMM.toFixed(0)} мм</span></div>
+            <div class="result-line"><span class="result-label">🧴 Объём герметика (чистый):</span><span class="result-value">${volumeML.toFixed(1)} мл</span></div>
+            <div class="result-line"><span class="result-label">⚠️ +${waste}% запас:</span><span class="result-value">${volumeWithWaste.toFixed(1)} мл</span></div>
+            <div class="result-line"><span class="result-label">📦 Картриджей 310 мл:</span><span class="result-value">${cartridges} шт.</span></div>
+            <div class="result-line"><span class="result-label">💰 Рекомендация:</span><span class="result-value">${cartridges > 10 ? 'Оптимально ведро 3л (~' + Math.ceil(volumeWithWaste / 3000) + ' шт)' : 'Удобно картриджи'}</span></div>
+        `;
     }
     
-    const inputs = ['length', 'width', 'height', 'cavityCount'];
-    inputs.forEach(id => {
-        document.getElementById(id).addEventListener('input', calculate);
-    });
-    document.getElementById('calcBtn').addEventListener('click', calculate);
+    // ---------- 3. Универсальная проходка (прямоугольная, кабели) ----------
+    function updateUniCalc() {
+        let width = parseFloat(document.getElementById('uni-width').value) || 0;
+        let height = parseFloat(document.getElementById('uni-height').value) || 0;
+        let fillPercent = parseFloat(document.getElementById('uni-fill').value) || 0;
+        let count = parseFloat(document.getElementById('uni-count').value) || 0;
+        let overhangCm = parseFloat(document.getElementById('uni-cable-overhang').value) || 0;
+        let wasteTotal = parseFloat(document.getElementById('uni-waste').value) || 0;
+
+        if (width <= 0 || height <= 0 || count <= 0) {
+            document.getElementById('uni-results').innerHTML = '<div class="result-line">⚠️ Введите корректные размеры проходки</div>';
+            return;
+        }
+        fillPercent = Math.min(95, Math.max(0, fillPercent));
+        
+        // Площадь проходки м² (для наглядности) но объём в мм³/мл
+        let areaMM2 = width * height;   // мм²
+        let areaM2 = areaMM2 / 1e6;
+        // Доля, занятая кабелями (0..1)
+        let fillRatio = fillPercent / 100;
+        // Свободная площадь, которую нужно заполнить герметиком (слой 1 мм — как в оригинальной таблице для покрытия)
+        // В таблице из экселя: объём герметика = площадь проходки * (1 - заполнение) * толщина покрытия (1 мм)
+        let freeAreaMM2 = areaMM2 * (1 - fillRatio);
+        let sealVolumeBaseMM3 = freeAreaMM2 * 1;   // толщина 1 мм (покрытие поверхности)
+        
+        // Дополнительно: покрытие кабелей на вылет (20 см = 200 мм)
+        // Оценим периметр части, заполненной кабелями: sqrt(площадь_кабелей_в_плане) *4 * коэффициент 0.5
+        let cableAreaMM2 = areaMM2 * fillRatio;   // площадь занятая кабелями
+        let cableSide = Math.sqrt(cableAreaMM2);
+        let perimeterCables = cableSide * 4 * 0.5; // условный периметр (средний)
+        let overhangMM = overhangCm * 10;
+        // объём на покрытие кабелей: периметр * вылет * толщина условного слоя (1.3мм как из таблицы)
+        let cableCoatVolumeMM3 = perimeterCables * overhangMM * 1.3;  
+        
+        let totalVolumeMM3 = (sealVolumeBaseMM3 + cableCoatVolumeMM3) * count;
+        let volumeML = totalVolumeMM3 / 1000;
+        let volumeWithWaste = volumeML * (1 + wasteTotal / 100);
+        let cartridges = Math.ceil(volumeWithWaste / CARTRIDGE_VOLUME_ML);
+        let buckets = Math.ceil(volumeWithWaste / BUCKET_VOLUME_ML);
+        
+        document.getElementById('uni-results').innerHTML = `
+            <div class="result-line"><span class="result-label">📐 Площадь проходки:</span><span class="result-value">${areaM2.toFixed(2)} м²</span></div>
+            <div class="result-line"><span class="result-label">🧩 Заполнение кабелями:</span><span class="result-value">${fillPercent}%</span></div>
+            <div class="result-line"><span class="result-label">💧 Объём покрытия (1мм слой + кабели вылет ${overhangCm}см):</span><span class="result-value">${volumeML.toFixed(0)} мл (чистый)</span></div>
+            <div class="result-line"><span class="result-label">⚠️ +${wasteTotal}% запас:</span><span class="result-value">${volumeWithWaste.toFixed(0)} мл</span></div>
+            <div class="result-line"><span class="result-label">📦 Картриджей 310 мл:</span><span class="result-value">${cartridges} шт.</span></div>
+            <div class="result-line"><span class="result-label">🛢️ Вёдер 3 литра:</span><span class="result-value">${buckets} шт.</span></div>
+            <div class="result-line"><span class="result-label">🔥 Рекомендация FIREFORT:</span><span class="result-value">${volumeWithWaste > 5000 ? 'Ведро 3 л — экономичнее' : 'Картриджи 310 мл'}</span></div>
+        `;
+    }
+
+    // Добавляем слушатели на все поля
+    function bindInputs(ids, callback) {
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('input', callback);
+        });
+    }
+    // швы
+    bindInputs(['joint-width','joint-depth','joint-length','joint-count','joint-waste'], updateJointCalc);
+    // трубы
+    bindInputs(['pipe-hole-dia','pipe-tube-dia','pipe-depth','pipe-count','pipe-waste'], updatePipeCalc);
+    // универсальная
+    bindInputs(['uni-width','uni-height','uni-fill','uni-count','uni-cable-overhang','uni-waste'], updateUniCalc);
     
-    calculate();
+    // Первоначальный вызов
+    updateJointCalc();
+    updatePipeCalc();
+    updateUniCalc();
 </script>
 </body>
 </html>
