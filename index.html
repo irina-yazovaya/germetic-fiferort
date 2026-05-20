@@ -115,7 +115,7 @@
             color: #b22234;
             font-size: 1.2rem;
         }
-        /* ВЫДЕЛЕННЫЙ БЛОК ИТОГА */
+        /* ВЫДЕЛЕННЫЙ БЛОК ИТОГА — ДВЕ ТАРЫ */
         .final-block {
             background: linear-gradient(135deg, #b22234 0%, #8b1a1a 100%);
             border-radius: 28px;
@@ -130,25 +130,42 @@
             font-size: 0.9rem;
             letter-spacing: 1px;
             text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        .final-row {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
             margin-bottom: 8px;
         }
-        .final-block .final-number {
+        .final-item {
+            text-align: center;
+        }
+        .final-item .final-number {
             color: white;
-            font-size: 2.8rem;
+            font-size: 2.2rem;
             font-weight: 800;
             line-height: 1;
             text-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-        .final-block .final-unit {
+        .final-item .final-unit {
             color: #ffd966;
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 600;
-            margin-left: 8px;
+            margin-left: 6px;
         }
-        .final-block .final-sub {
+        .final-item .final-label {
             color: #fcd9b8;
-            font-size: 0.8rem;
-            margin-top: 6px;
+            font-size: 0.75rem;
+            margin-top: 5px;
+        }
+        .final-sub {
+            color: #fcd9b8;
+            font-size: 0.75rem;
+            margin-top: 12px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255,255,255,0.2);
         }
         .note {
             font-size: 0.8rem;
@@ -161,7 +178,8 @@
         @media (max-width: 700px) {
             .card { padding: 18px; }
             .tab-btn { padding: 8px 18px; }
-            .final-block .final-number { font-size: 2rem; }
+            .final-item .final-number { font-size: 1.6rem; }
+            .final-row { gap: 20px; }
         }
         footer {
             text-align: center;
@@ -214,11 +232,20 @@
         </div>
         <div id="joint-final-block" class="final-block">
             <div class="final-title">ИТОГОВОЕ КОЛИЧЕСТВО ГЕРМЕТИКА</div>
-            <div><span class="final-number" id="joint-final-qty">0</span><span class="final-unit">шт (картридж 310 мл)</span></div>
+            <div class="final-row">
+                <div class="final-item">
+                    <div><span class="final-number" id="joint-final-cartridge">0</span><span class="final-unit">шт</span></div>
+                    <div class="final-label">картридж 310 мл</div>
+                </div>
+                <div class="final-item">
+                    <div><span class="final-number" id="joint-final-bucket">0</span><span class="final-unit">шт</span></div>
+                    <div class="final-label">ведро 3 кг</div>
+                </div>
+            </div>
             <div class="final-sub">с учётом запаса и технологии</div>
         </div>
         <div class="result-area" id="joint-results"></div>
-        <div class="note">* Расход рассчитан по формуле: (ширина × глубина × длина × кол-во швов) + запас. Объём картриджа 310 мл (0.31 л).</div>
+        <div class="note">* Расход рассчитан по формуле: (ширина × глубина × длина × кол-во швов) + запас. Плотность герметика ~1.3 г/мл. Ведро 3 кг ≈ 2308 мл.</div>
     </div>
 
     <!-- 2. ТРУБЫ -->
@@ -253,11 +280,20 @@
         </div>
         <div id="pipe-final-block" class="final-block">
             <div class="final-title">ИТОГОВОЕ КОЛИЧЕСТВО ГЕРМЕТИКА</div>
-            <div><span class="final-number" id="pipe-final-qty">0</span><span class="final-unit">шт (картридж 310 мл)</span></div>
+            <div class="final-row">
+                <div class="final-item">
+                    <div><span class="final-number" id="pipe-final-cartridge">0</span><span class="final-unit">шт</span></div>
+                    <div class="final-label">картридж 310 мл</div>
+                </div>
+                <div class="final-item">
+                    <div><span class="final-number" id="pipe-final-bucket">0</span><span class="final-unit">шт</span></div>
+                    <div class="final-label">ведро 3 кг</div>
+                </div>
+            </div>
             <div class="final-sub">с учётом запаса и авторасчёта глубины</div>
         </div>
         <div class="result-area" id="pipe-results"></div>
-        <div class="note">* Для круглой проходки длина шва = π × (D_отв + D_трубы)/2. Глубина: если не указана = ROUNDUP(ширина_кольца/2, 0).</div>
+        <div class="note">* Для круглой проходки длина шва = π × (D_отв + D_трубы)/2. Глубина: если не указана = ROUNDUP(ширина_кольца/2, 0). Плотность ~1.3 г/мл.</div>
     </div>
 
     <!-- 3. УНИВЕРСАЛЬНАЯ ПРОХОДКА -->
@@ -299,18 +335,31 @@
         </div>
         <div id="uni-final-block" class="final-block">
             <div class="final-title">ИТОГОВОЕ КОЛИЧЕСТВО ГЕРМЕТИКА</div>
-            <div><span class="final-number" id="uni-final-qty">0</span><span class="final-unit">шт (картридж 310 мл)</span></div>
+            <div class="final-row">
+                <div class="final-item">
+                    <div><span class="final-number" id="uni-final-cartridge">0</span><span class="final-unit">шт</span></div>
+                    <div class="final-label">картридж 310 мл</div>
+                </div>
+                <div class="final-item">
+                    <div><span class="final-number" id="uni-final-bucket">0</span><span class="final-unit">шт</span></div>
+                    <div class="final-label">ведро 3 кг</div>
+                </div>
+            </div>
             <div class="final-sub">с учётом покрытия кабелей и запаса</div>
         </div>
         <div class="result-area" id="uni-results"></div>
-        <div class="note">** Расчёт: Объём герметика = (площадь проходки * (1 - заполнение/100) * толщина слоя 1мм) + объём на покрытие кабелей (вылет × периметр кабельной зоны).</div>
+        <div class="note">** Расчёт: Объём герметика = (площадь проходки * (1 - заполнение/100) * толщина слоя 1мм) + объём на покрытие кабелей (вылет × периметр кабельной зоны). Плотность ~1.3 г/мл.</div>
     </div>
-    <footer>Расход приблизительный. Для точного подбора учитывайте рекомендации технолога. FIREFORT® — огнезащита.</footer>
+    <footer>Расход приблизительный. Плотность герметика ~1.3 г/мл. Ведро 3 кг ≈ 2308 мл. Для точного подбора учитывайте рекомендации технолога. FIREFORT® — огнезащита.</footer>
 </div>
 
 <script>
-    const CARTRIDGE_VOLUME_ML = 310;
-    const BUCKET_VOLUME_ML = 3000;
+    const CARTRIDGE_VOLUME_ML = 310;      // картридж 310 мл
+    const BUCKET_WEIGHT_KG = 3;           // ведро 3 кг
+    const DENSITY_G_PER_ML = 1.3;         // плотность ~1.3 г/мл
+    
+    // Объём ведра в мл: 3000 г / 1.3 г/мл
+    const BUCKET_VOLUME_ML = (BUCKET_WEIGHT_KG * 1000) / DENSITY_G_PER_ML;  // ≈ 2308 мл
 
     // Переключение табов
     const tabs = document.querySelectorAll('.tab-btn');
@@ -337,6 +386,13 @@
         });
     });
 
+    // Вспомогательная функция для расчёта количества тары
+    function calculatePackaging(volumeML) {
+        let cartridges = Math.ceil(volumeML / CARTRIDGE_VOLUME_ML);
+        let buckets = Math.ceil(volumeML / BUCKET_VOLUME_ML);
+        return { cartridges, buckets };
+    }
+
     // ---------- 1. Швы ----------
     function updateJointCalc() {
         let width = parseFloat(document.getElementById('joint-width').value) || 0;
@@ -347,21 +403,23 @@
 
         if (width <= 0 || depth <= 0 || length <= 0 || count <= 0) {
             document.getElementById('joint-results').innerHTML = '<div class="result-line">⚠️ Введите положительные размеры</div>';
-            document.getElementById('joint-final-qty').innerText = '0';
+            document.getElementById('joint-final-cartridge').innerText = '0';
+            document.getElementById('joint-final-bucket').innerText = '0';
             return;
         }
 
         let volumeMM3 = width * depth * length * count;
         let volumeML = volumeMM3 / 1000;
         let volumeWithWaste = volumeML * (1 + wastePercent / 100);
-        let cartridgesNeeded = Math.ceil(volumeWithWaste / CARTRIDGE_VOLUME_ML);
+        let { cartridges, buckets } = calculatePackaging(volumeWithWaste);
         
-        document.getElementById('joint-final-qty').innerText = cartridgesNeeded;
+        document.getElementById('joint-final-cartridge').innerText = cartridges;
+        document.getElementById('joint-final-bucket').innerText = buckets;
         
         document.getElementById('joint-results').innerHTML = `
             <div class="result-line"><span class="result-label">📦 Объём швов (без запаса):</span><span class="result-value">${volumeML.toFixed(1)} мл</span></div>
             <div class="result-line"><span class="result-label">➕ С запасом ${wastePercent}%:</span><span class="result-value">${volumeWithWaste.toFixed(1)} мл</span></div>
-            <div class="result-line"><span class="result-label">💧 Общий вес ~ (≈1.3 г/мл):</span><span class="result-value">${(volumeWithWaste * 1.3 / 1000).toFixed(1)} кг</span></div>
+            <div class="result-line"><span class="result-label">⚖️ Масса герметика:</span><span class="result-value">${(volumeWithWaste * DENSITY_G_PER_ML / 1000).toFixed(1)} кг</span></div>
         `;
     }
 
@@ -376,7 +434,8 @@
 
         if (holeDia <= 0 || tubeDia <= 0 || count <= 0 || holeDia <= tubeDia) {
             document.getElementById('pipe-results').innerHTML = '<div class="result-line">⚠️ Проверьте: диаметр отверстия > диаметра трубы, все значения >0</div>';
-            document.getElementById('pipe-final-qty').innerText = '0';
+            document.getElementById('pipe-final-cartridge').innerText = '0';
+            document.getElementById('pipe-final-bucket').innerText = '0';
             return;
         }
         
@@ -393,9 +452,10 @@
         let totalVolumeMM3 = oneSealVolumeMM3 * count;
         let volumeML = totalVolumeMM3 / 1000;
         let volumeWithWaste = volumeML * (1 + waste / 100);
-        let cartridges = Math.ceil(volumeWithWaste / CARTRIDGE_VOLUME_ML);
+        let { cartridges, buckets } = calculatePackaging(volumeWithWaste);
         
-        document.getElementById('pipe-final-qty').innerText = cartridges;
+        document.getElementById('pipe-final-cartridge').innerText = cartridges;
+        document.getElementById('pipe-final-bucket').innerText = buckets;
         
         document.getElementById('pipe-results').innerHTML = `
             <div class="result-line"><span class="result-label">🔄 Ширина кольцевого зазора:</span><span class="result-value">${gapWidth.toFixed(1)} мм</span></div>
@@ -403,7 +463,7 @@
             <div class="result-line"><span class="result-label">📐 Глубина заделки:</span><span class="result-value">${depth} мм ${(!depthRaw || depthRaw === "" || parseFloat(depthRaw)<=0) ? '(рассчитана автоматически)' : ''}</span></div>
             <div class="result-line"><span class="result-label">🧴 Объём герметика (чистый):</span><span class="result-value">${volumeML.toFixed(1)} мл</span></div>
             <div class="result-line"><span class="result-label">⚠️ +${waste}% запас:</span><span class="result-value">${volumeWithWaste.toFixed(1)} мл</span></div>
-            <div class="result-line"><span class="result-label">💰 Рекомендация:</span><span class="result-value">${cartridges > 10 ? 'Оптимально ведро 3л (~' + Math.ceil(volumeWithWaste / 3000) + ' шт)' : 'Удобно картриджи'}</span></div>
+            <div class="result-line"><span class="result-label">⚖️ Масса герметика:</span><span class="result-value">${(volumeWithWaste * DENSITY_G_PER_ML / 1000).toFixed(1)} кг</span></div>
         `;
     }
     
@@ -418,7 +478,8 @@
 
         if (width <= 0 || height <= 0 || count <= 0) {
             document.getElementById('uni-results').innerHTML = '<div class="result-line">⚠️ Введите корректные размеры проходки</div>';
-            document.getElementById('uni-final-qty').innerText = '0';
+            document.getElementById('uni-final-cartridge').innerText = '0';
+            document.getElementById('uni-final-bucket').innerText = '0';
             return;
         }
         fillPercent = Math.min(95, Math.max(0, fillPercent));
@@ -438,18 +499,18 @@
         let totalVolumeMM3 = (sealVolumeBaseMM3 + cableCoatVolumeMM3) * count;
         let volumeML = totalVolumeMM3 / 1000;
         let volumeWithWaste = volumeML * (1 + wasteTotal / 100);
-        let cartridges = Math.ceil(volumeWithWaste / CARTRIDGE_VOLUME_ML);
-        let buckets = Math.ceil(volumeWithWaste / BUCKET_VOLUME_ML);
+        let { cartridges, buckets } = calculatePackaging(volumeWithWaste);
         
-        document.getElementById('uni-final-qty').innerText = cartridges;
+        document.getElementById('uni-final-cartridge').innerText = cartridges;
+        document.getElementById('uni-final-bucket').innerText = buckets;
         
         document.getElementById('uni-results').innerHTML = `
             <div class="result-line"><span class="result-label">📐 Площадь проходки:</span><span class="result-value">${areaM2.toFixed(2)} м²</span></div>
             <div class="result-line"><span class="result-label">🧩 Заполнение кабелями:</span><span class="result-value">${fillPercent}%</span></div>
             <div class="result-line"><span class="result-label">💧 Объём покрытия (1мм слой + кабели вылет ${overhangCm}см):</span><span class="result-value">${volumeML.toFixed(0)} мл (чистый)</span></div>
             <div class="result-line"><span class="result-label">⚠️ +${wasteTotal}% запас:</span><span class="result-value">${volumeWithWaste.toFixed(0)} мл</span></div>
-            <div class="result-line"><span class="result-label">🛢️ Вёдер 3 литра:</span><span class="result-value">${buckets} шт.</span></div>
-            <div class="result-line"><span class="result-label">🔥 Рекомендация FIREFORT:</span><span class="result-value">${volumeWithWaste > 5000 ? 'Ведро 3 л — экономичнее' : 'Картриджи 310 мл'}</span></div>
+            <div class="result-line"><span class="result-label">⚖️ Масса герметика:</span><span class="result-value">${(volumeWithWaste * DENSITY_G_PER_ML / 1000).toFixed(1)} кг</span></div>
+            <div class="result-line"><span class="result-label">🔥 Рекомендация FIREFORT:</span><span class="result-value">${volumeWithWaste > BUCKET_VOLUME_ML * 0.8 ? 'Ведро 3 кг — экономичнее' : 'Картриджи 310 мл'}</span></div>
         `;
     }
 
