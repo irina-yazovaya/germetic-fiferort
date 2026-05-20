@@ -154,7 +154,7 @@
         <button class="tab-btn" data-tab="universal">🏭 Универсальная проходка (кабели)</button>
     </div>
 
-    <!-- 1. ГЕРМЕТИК ДЛЯ ШВОВ (акриловый / огнестойкий) -->
+    <!-- 1. ГЕРМЕТИК ДЛЯ ШВОВ -->
     <div id="tab-joints" class="card tab-content" style="display: block;">
         <h3>📐 Прямоугольные швы и стыки</h3>
         <div class="grid-2col">
@@ -184,9 +184,7 @@
             <input type="number" id="joint-waste" value="10" step="1">
             <div class="unit">обычно 10–15% на неровности</div>
         </div>
-        <div class="result-area" id="joint-results">
-            <!-- динамические результаты -->
-        </div>
+        <div class="result-area" id="joint-results"></div>
         <div class="note">* Расход рассчитан по формуле: (ширина × глубина × длина × кол-во швов) + запас. Объём картриджа 310 мл (0.31 л).</div>
     </div>
 
@@ -206,8 +204,8 @@
             </div>
             <div class="param-group">
                 <label>Глубина шва / зазора (мм)</label>
-                <input type="number" id="pipe-depth" value="15" step="1">
-                <div class="unit">мм (толщина герметика по глубине)</div>
+                <input type="number" id="pipe-depth" value="" step="1" placeholder="Оставьте пустым для авторасчёта">
+                <div class="unit">мм (если пусто — половина ширины зазора, как в Excel)</div>
             </div>
             <div class="param-group">
                 <label>Количество отверстий</label>
@@ -221,10 +219,10 @@
             <div class="unit">% к объёму</div>
         </div>
         <div class="result-area" id="pipe-results"></div>
-        <div class="note">* Для круглой проходки длина шва = π × (D_отв + D_трубы)/2 (средняя окружность). Объём = длина шва × ширина кольца × глубина × кол-во.</div>
+        <div class="note">* Для круглой проходки длина шва = π × (D_отв + D_трубы)/2. Глубина: если не указана = ROUNDUP(ширина_кольца/2, 0).</div>
     </div>
 
-    <!-- 3. УНИВЕРСАЛЬНАЯ ПРОХОДКА (прямоугольная с кабелями) -->
+    <!-- 3. УНИВЕРСАЛЬНАЯ ПРОХОДКА -->
     <div id="tab-universal" class="card tab-content" style="display: none;">
         <h3>🏢 Прямоугольная проходка (кабели, пучки)</h3>
         <div class="grid-2col">
@@ -262,15 +260,14 @@
             </div>
         </div>
         <div class="result-area" id="uni-results"></div>
-        <div class="note">** Расчёт: Объём герметика = (площадь проходки * (1 - заполнение/100) * толщина слоя 1мм) + объём на покрытие кабелей (вылет × периметр кабельной зоны). Картридж 310 мл, ведро 3 л — показываем оба варианта.</div>
+        <div class="note">** Расчёт: Объём герметика = (площадь проходки * (1 - заполнение/100) * толщина слоя 1мм) + объём на покрытие кабелей (вылет × периметр кабельной зоны).</div>
     </div>
     <footer>Расход приблизительный. Для точного подбора учитывайте рекомендации технолога. FIREFORT® — огнезащита.</footer>
 </div>
 
 <script>
-    // Утилиты объёма картриджа 310 мл = 310000 мм³
-    const CARTRIDGE_VOLUME_ML = 310;   // мл
-    const BUCKET_VOLUME_ML = 3000;     // 3 литра
+    const CARTRIDGE_VOLUME_ML = 310;
+    const BUCKET_VOLUME_ML = 3000;
 
     // Переключение табов
     const tabs = document.querySelectorAll('.tab-btn');
@@ -291,7 +288,6 @@
             if (tabId === 'joints') contents.joints.style.display = 'block';
             if (tabId === 'pipes') contents.pipes.style.display = 'block';
             if (tabId === 'universal') contents.universal.style.display = 'block';
-            // обновить активный расчёт при переключении (пересчёт)
             if (tabId === 'joints') updateJointCalc();
             if (tabId === 'pipes') updatePipeCalc();
             if (tabId === 'universal') updateUniCalc();
@@ -311,11 +307,9 @@
             return;
         }
 
-        // объём в мм³: ширина * глубина * длина * количество
         let volumeMM3 = width * depth * length * count;
-        let volumeML = volumeMM3 / 1000;   // переводим мм³ в мл
+        let volumeML = volumeMM3 / 1000;
         let volumeWithWaste = volumeML * (1 + wastePercent / 100);
-        
         let cartridgesNeeded = Math.ceil(volumeWithWaste / CARTRIDGE_VOLUME_ML);
         
         document.getElementById('joint-results').innerHTML = `
@@ -326,23 +320,30 @@
         `;
     }
 
-    // ---------- 2. Трубные проходки (кольцевой зазор) ----------
+    // ---------- 2. Трубные проходки (с автоглубиной) ----------
     function updatePipeCalc() {
         let holeDia = parseFloat(document.getElementById('pipe-hole-dia').value) || 0;
         let tubeDia = parseFloat(document.getElementById('pipe-tube-dia').value) || 0;
-        let depth = parseFloat(document.getElementById('pipe-depth').value) || 0;
+        let depthRaw = document.getElementById('pipe-depth').value;
+        let depth = parseFloat(depthRaw) || 0;
         let count = parseFloat(document.getElementById('pipe-count').value) || 0;
         let waste = parseFloat(document.getElementById('pipe-waste').value) || 0;
 
-        if (holeDia <= 0 || tubeDia <= 0 || depth <= 0 || count <= 0 || holeDia <= tubeDia) {
+        if (holeDia <= 0 || tubeDia <= 0 || count <= 0 || holeDia <= tubeDia) {
             document.getElementById('pipe-results').innerHTML = '<div class="result-line">⚠️ Проверьте: диаметр отверстия > диаметра трубы, все значения >0</div>';
             return;
         }
-        // средняя окружность зазора: π * ( (D_hole + D_tube)/2 )
+        
+        let gapWidth = (holeDia - tubeDia) / 2;
+        
+        // АВТОГЛУБИНА: если поле пустое или 0, берём половину ширины зазора (как в Excel: ROUNDUP(ширина_кольца/2,0))
+        if (!depthRaw || depthRaw === "" || depth <= 0) {
+            depth = Math.ceil(gapWidth / 2);
+            document.getElementById('pipe-depth').value = depth;
+        }
+        
         let avgDiameter = (holeDia + tubeDia) / 2;
-        let seamLengthMM = Math.PI * avgDiameter;   // длина кольцевого шва (мм)
-        let gapWidth = (holeDia - tubeDia) / 2;      // ширина кольца (мм)
-        // объём одного шва мм³ = длина * ширина_кольца * глубина
+        let seamLengthMM = Math.PI * avgDiameter;
         let oneSealVolumeMM3 = seamLengthMM * gapWidth * depth;
         let totalVolumeMM3 = oneSealVolumeMM3 * count;
         let volumeML = totalVolumeMM3 / 1000;
@@ -352,6 +353,7 @@
         document.getElementById('pipe-results').innerHTML = `
             <div class="result-line"><span class="result-label">🔄 Ширина кольцевого зазора:</span><span class="result-value">${gapWidth.toFixed(1)} мм</span></div>
             <div class="result-line"><span class="result-label">📏 Длина шва (средняя окружность):</span><span class="result-value">${seamLengthMM.toFixed(0)} мм</span></div>
+            <div class="result-line"><span class="result-label">📐 Глубина заделки:</span><span class="result-value">${depth} мм ${(!depthRaw || depthRaw === "" || parseFloat(depthRaw)<=0) ? '(рассчитана автоматически: половина ширины зазора)' : ''}</span></div>
             <div class="result-line"><span class="result-label">🧴 Объём герметика (чистый):</span><span class="result-value">${volumeML.toFixed(1)} мл</span></div>
             <div class="result-line"><span class="result-label">⚠️ +${waste}% запас:</span><span class="result-value">${volumeWithWaste.toFixed(1)} мл</span></div>
             <div class="result-line"><span class="result-label">📦 Картриджей 310 мл:</span><span class="result-value">${cartridges} шт.</span></div>
@@ -359,7 +361,7 @@
         `;
     }
     
-    // ---------- 3. Универсальная проходка (прямоугольная, кабели) ----------
+    // ---------- 3. Универсальная проходка ----------
     function updateUniCalc() {
         let width = parseFloat(document.getElementById('uni-width').value) || 0;
         let height = parseFloat(document.getElementById('uni-height').value) || 0;
@@ -374,24 +376,17 @@
         }
         fillPercent = Math.min(95, Math.max(0, fillPercent));
         
-        // Площадь проходки м² (для наглядности) но объём в мм³/мл
-        let areaMM2 = width * height;   // мм²
+        let areaMM2 = width * height;
         let areaM2 = areaMM2 / 1e6;
-        // Доля, занятая кабелями (0..1)
         let fillRatio = fillPercent / 100;
-        // Свободная площадь, которую нужно заполнить герметиком (слой 1 мм — как в оригинальной таблице для покрытия)
-        // В таблице из экселя: объём герметика = площадь проходки * (1 - заполнение) * толщина покрытия (1 мм)
         let freeAreaMM2 = areaMM2 * (1 - fillRatio);
-        let sealVolumeBaseMM3 = freeAreaMM2 * 1;   // толщина 1 мм (покрытие поверхности)
+        let sealVolumeBaseMM3 = freeAreaMM2 * 1;
         
-        // Дополнительно: покрытие кабелей на вылет (20 см = 200 мм)
-        // Оценим периметр части, заполненной кабелями: sqrt(площадь_кабелей_в_плане) *4 * коэффициент 0.5
-        let cableAreaMM2 = areaMM2 * fillRatio;   // площадь занятая кабелями
+        let cableAreaMM2 = areaMM2 * fillRatio;
         let cableSide = Math.sqrt(cableAreaMM2);
-        let perimeterCables = cableSide * 4 * 0.5; // условный периметр (средний)
+        let perimeterCables = cableSide * 4 * 0.5;
         let overhangMM = overhangCm * 10;
-        // объём на покрытие кабелей: периметр * вылет * толщина условного слоя (1.3мм как из таблицы)
-        let cableCoatVolumeMM3 = perimeterCables * overhangMM * 1.3;  
+        let cableCoatVolumeMM3 = perimeterCables * overhangMM * 1.3;
         
         let totalVolumeMM3 = (sealVolumeBaseMM3 + cableCoatVolumeMM3) * count;
         let volumeML = totalVolumeMM3 / 1000;
@@ -410,18 +405,16 @@
         `;
     }
 
-    // Добавляем слушатели на все поля
+    // Привязка обработчиков
     function bindInputs(ids, callback) {
         ids.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.addEventListener('input', callback);
         });
     }
-    // швы
+    
     bindInputs(['joint-width','joint-depth','joint-length','joint-count','joint-waste'], updateJointCalc);
-    // трубы
     bindInputs(['pipe-hole-dia','pipe-tube-dia','pipe-depth','pipe-count','pipe-waste'], updatePipeCalc);
-    // универсальная
     bindInputs(['uni-width','uni-height','uni-fill','uni-count','uni-cable-overhang','uni-waste'], updateUniCalc);
     
     // Первоначальный вызов
